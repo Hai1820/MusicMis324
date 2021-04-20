@@ -1,0 +1,73 @@
+﻿@model MusicStore.ViewModels.AlBumViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Album Details</h2>
+<p>
+    <img alt="@Model.Albums.Title" src="@Model.Albums.AlbumArtUrl"/>
+</p>
+<div id="album-details">
+    <p>
+        <em>Genre:</em>@Model.Albums.Genre.Name
+    </p>
+    <p>
+        <em>Artist:</em> @Model.Albums.Artist.Name
+    </p>
+    <p>
+        <em>Description:</em>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    </p>
+    <p>
+        <em>Price:</em> @String.Format("{0:F}", Model.Albums.Price)
+    </p>
+    <p class="button">
+        @{ 
+            var url = "/ShoppingCart/AddToCart/" + Model.Albums.AlbumId;
+        }
+        <a href=@url>Add To Cart</a>
+        @*@Html.ActionLink("Add to Cart", "AddToCart", "ShoppingCart", new { id = Model.Albums.AlbumId })*@
+    </p>
+
+    <div style="margin-top: 20%">
+        <h2>Comments Session:</h2>
+        @using (Html.BeginForm("AddComment", "Store", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true)
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.comment.Description, new { style = "width:100%; height: 75px", })
+                        @Html.ValidationMessageFor(model => model.comment.Description)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Submit" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+
+        @foreach (var item in Model.Comments)
+        {
+    <div style="border-left: 6px solid red; background-color: lightgrey">
+        <h3>@item.Username:</h3>
+        <p>@item.Description</p>
+    </div>}
+    </div>
+    @*<div>
+        @Html.ActionLink("Add your comment", "Create", "Store");
+    </div>*@
+</div>
+
+
+
+
